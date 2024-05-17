@@ -17,10 +17,13 @@
     "require": {
         "composer/installers": "^2.0",
         "cweagans/composer-patches": "^1.7",
+        "drupal/admin_toolbar": "^3.4",
         "drupal/core-composer-scaffold": "^10.2",
         "drupal/core-project-message": "^10.2",
         "drupal/core-recommended": "^10.2",
-        "drupal/next": "^1.6"
+        "drupal/next": "^1.6",
+        "drupal/restui": "^1.21",
+        "drush/drush": "^12.5"
     },
     "conflict": {
         "drupal/drupal": "*"
@@ -103,8 +106,5 @@
                 "      composer remove drupal/core-project-message"
             ]
         }
-    },
-    "require-dev": {
-        "drush/drush": "^12.5"
     }
 }
