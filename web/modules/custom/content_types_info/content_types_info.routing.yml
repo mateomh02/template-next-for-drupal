@@ -1,0 +1,7 @@
+content_types_info.types_info:
+  path: '/content-types-info'
+  defaults:
+    _controller: '\Drupal\content_types_info\Controller\ContentTypesInfoController::typesInfo'
+    _format: 'json'
+  requirements:
+    _access: 'TRUE'

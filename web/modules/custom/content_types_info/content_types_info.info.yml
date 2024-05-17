@@ -1,0 +1,7 @@
+name: 'Content Types Info'
+type: module
+description: 'Provides a JSON endpoint to retrieve information about content types and fields.'
+package: Custom
+core_version_requirement: ^9 || ^10
+dependencies:
+  - drupal:serialization
