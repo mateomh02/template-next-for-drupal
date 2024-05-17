@@ -1,0 +1,4 @@
+name: template-next-for-drupal
+recipe: drupal10
+config:
+  webroot: web
