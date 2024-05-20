@@ -15,7 +15,7 @@ interface IndexPageProps {
 }
 
 export default function IndexPage({ nodes, basicPage, contentTypeNewsPromises }: IndexPageProps) {
-  console.log(contentTypeNewsPromises)
+  // console.log(contentTypeNewsPromises)
   return (
     <Layout>
       <Head>
@@ -97,7 +97,7 @@ export async function getStaticProps(
   )
 
   const newContentType = await drupal.getResourceCollectionFromContext<DrupalNode[]>(
-    "node--page",
+    "node--article",
     context,
     {
       params: {

@@ -4,26 +4,32 @@ import { DrupalNode } from "next-drupal"
 
 import { drupal } from "lib/drupal"
 import { NodeArticle } from "components/node--article"
+import { NodeContentType } from "components/node--new-content-type"
 import { NodeBasicPage } from "components/node--basic-page"
 import { Layout } from "components/layout"
+import { getContentType } from './api/apiContentType'
 
 const RESOURCE_TYPES = ["node--page", "node--article"]
 
 interface NodePageProps {
   resource: DrupalNode
+  contentTypeNews: String[]
 }
 
-export default function NodePage({ resource }: NodePageProps) {
+export default function NodePage({ resource, contentTypeNews }: NodePageProps) {
   if (!resource) return null
-
   return (
     <Layout>
       <Head>
         <title>{resource.title}</title>
         <meta name="description" content="A Next.js site powered by Drupal." />
       </Head>
-      {resource.type === "node--page" && <NodeBasicPage node={resource} />}
-      {resource.type === "node--article" && <NodeArticle node={resource} />}
+      {/* {resource.type === "node--page" && <NodeBasicPage node={resource} />}
+      {resource.type === "node--article" && <NodeArticle node={resource} />} */}
+      {<NodeContentType node={resource} />}
+      {contentTypeNews.map((i) => {
+        {<NodeContentType node={resource} />}
+      })}
     </Layout>
   )
 }
@@ -39,7 +45,8 @@ export async function getStaticProps(
   context
 ): Promise<GetStaticPropsResult<NodePageProps>> {
   const path = await drupal.translatePathFromContext(context)
-
+  const contentType = await getContentType();
+  const contentTypeNews = Object.keys(contentType)
   if (!path) {
     return {
       notFound: true,
@@ -82,6 +89,7 @@ export async function getStaticProps(
   return {
     props: {
       resource,
+      contentTypeNews,
     },
   }
 }
