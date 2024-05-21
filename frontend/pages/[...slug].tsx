@@ -12,11 +12,12 @@ import { getContentType } from './api/apiContentType'
 const RESOURCE_TYPES = ["node--page", "node--article"]
 
 interface NodePageProps {
-  resource: DrupalNode
-  contentTypeNews: String[]
+  resource: DrupalNode;
+  contentTypeNews: String[];
+  nameFieldImage: string;
 }
 
-export default function NodePage({ resource, contentTypeNews }: NodePageProps) {
+export default function NodePage({ resource, contentTypeNews, nameFieldImage }: NodePageProps) {
   if (!resource) return null
   return (
     <Layout>
@@ -26,10 +27,12 @@ export default function NodePage({ resource, contentTypeNews }: NodePageProps) {
       </Head>
       {/* {resource.type === "node--page" && <NodeBasicPage node={resource} />}
       {resource.type === "node--article" && <NodeArticle node={resource} />} */}
-      {<NodeContentType node={resource} />}
-      {contentTypeNews.map((i) => {
-        {<NodeContentType node={resource} />}
-      })}
+
+      {<NodeContentType node={resource} nameImage={nameFieldImage}/>}
+
+      {/* {contentTypeNews.map((i) => {
+        { <NodeContentType node={resource} /> }
+      })} */}
     </Layout>
   )
 }
@@ -56,11 +59,27 @@ export async function getStaticProps(
   const type = path.jsonapi.resourceName
 
   let params = {}
-  if (type === "node--article") {
-    params = {
-      include: "field_image,uid",
+  // if (type === "node--article" || "node--motos") {
+  // params = {
+  //   include: "field_image,uid",
+  // }
+  // }
+
+  var nameFieldImage = ''
+  Object.keys(contentType).map(async (i) => {
+    if (i == path.entity.bundle) {
+      Object.keys(contentType[i].fields).map((e) => {
+        if (contentType[i].fields[e].type == 'image') {
+          console.log(e) // Nombre del sistema
+          nameFieldImage = e
+          params = {
+            include: "uid,"+e,
+          }
+        }
+      })
     }
-  }
+  })
+
 
   const resource = await drupal.getResourceFromContext<DrupalNode>(
     path,
@@ -69,7 +88,6 @@ export async function getStaticProps(
       params,
     }
   )
-
   // At this point, we know the path exists and it points to a resource.
   // If we receive an error, it means something went wrong on Drupal.
   // We throw an error to tell revalidation to skip this for now.
@@ -90,6 +108,7 @@ export async function getStaticProps(
     props: {
       resource,
       contentTypeNews,
+      nameFieldImage,
     },
   }
 }

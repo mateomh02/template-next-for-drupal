@@ -6,7 +6,7 @@ import { drupal } from "lib/drupal"
 import { Layout } from "components/layout"
 import { NodeArticleTeaser } from "components/node--article--teaser"
 
-import {getContentType} from './api/apiContentType'
+import { getContentType } from './api/apiContentType'
 
 interface IndexPageProps {
   nodes: DrupalNode[]
@@ -25,32 +25,6 @@ export default function IndexPage({ nodes, basicPage, contentTypeNewsPromises }:
           content="A Next.js site powered by a Drupal backend."
         />
       </Head>
-      {/* <div>
-        <h1 className="mb-10 text-6xl font-black">Latest Articles.</h1>
-        {nodes?.length ? (
-          nodes.map((node) => (
-            <div key={node.id}>
-              <NodeArticleTeaser node={node} />
-              <hr className="my-20" />
-            </div>
-          ))
-        ) : (
-          <p className="py-4">No nodes found</p>
-        )}
-      </div>
-      <div>
-        <h1 className="mb-10 text-6xl font-black">Latest Articles.</h1>
-        {basicPage?.length ? (
-          basicPage.map((node) => (
-            <div key={node.id}>
-              <NodeArticleTeaser node={node} />
-              <hr className="my-20" />
-            </div>
-          ))
-        ) : (
-          <p className="py-4">No nodes found</p>
-        )}
-      </div> */}
       <div>
         <h1 className="mb-10 text-6xl font-black">Latest Articles.</h1>
         {contentTypeNewsPromises?.length ? (
@@ -110,23 +84,33 @@ export async function getStaticProps(
   )
 
   const contentType = await getContentType();
-  const contentTypeNewsPromises: DrupalNode[][] = await Promise.all(Object.keys(contentType).map(async (i)=>{
+  const contentTypeNewsPromises: DrupalNode[][] = await Promise.all(Object.keys(contentType).map(async (i) => {
     const fields = Object.keys(contentType[i].fields).join(',')
+    const fieldsObject = contentType[i].fields
+
+    const params: any = {
+      "filter[status]": 1,
+      [`fields[node--${i}]`]: `${fields}`,
+      sort: "-created",
+    };
+
+    // Verify if exist el campo imagen para traer la información
+    Object.keys(contentType[i].fields).map((e) => {
+      if (contentType[i].fields[e].type == 'image') {
+        params.include = 'uid,' + e;
+      }
+    })
+
     const contentTypeNews = await drupal.getResourceCollectionFromContext<DrupalNode[]>(
       `node--${i}`,
       context,
       {
-        params: {
-          "filter[status]": 1,
-          [`fields[node--${i}]`]: `${fields}`,
-          include: "uid",
-          sort: "-created",
-        },
+        params
       }
     )
     return contentTypeNews
   }))
-  
+
 
   return {
     props: {

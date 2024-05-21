@@ -5,6 +5,7 @@ import { absoluteUrl, formatDate } from "lib/utils"
 
 interface NodeArticleProps {
   node: DrupalNode
+
 }
 
 export function NodeArticle({ node, ...props }: NodeArticleProps) {

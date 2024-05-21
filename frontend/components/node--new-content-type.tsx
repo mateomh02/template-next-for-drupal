@@ -5,11 +5,13 @@ import { absoluteUrl, formatDate } from "lib/utils"
 
 interface NodeArticleProps {
     node: DrupalNode
+    nameImage: String
 }
 
-export function NodeContentType({ node, ...props }: NodeArticleProps) {
-    console.log(node)
-    return (<article {...props}>
+export function NodeContentType({ node, nameImage, ...props}: NodeArticleProps) {
+  console.log(nameImage)
+  console.log(node.nameImage)
+    return (
         <article {...props}>
             <h1 className="mb-4 text-6xl font-black leading-tight">{node.title}</h1>
             <div className="mb-4 text-gray-600">
@@ -43,6 +45,5 @@ export function NodeContentType({ node, ...props }: NodeArticleProps) {
                     className="mt-6 font-serif text-xl leading-loose prose"
                 />
             )}
-        </article>
-    </article>)
+        </article>)
 }
