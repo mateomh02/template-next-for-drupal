@@ -7,15 +7,17 @@ import { Layout } from "components/layout"
 import { NodeArticleTeaser } from "components/node--article--teaser"
 
 import { getContentType } from './api/apiContentType'
+import FieldImage from '../lib/interface';
 
 interface IndexPageProps {
   nodes: DrupalNode[]
   basicPage: DrupalNode[]
   contentTypeNewsPromises: DrupalNode[]
+  nameFieldImage: string[]
 }
 
-export default function IndexPage({ nodes, basicPage, contentTypeNewsPromises }: IndexPageProps) {
-  // console.log(contentTypeNewsPromises)
+export default function IndexPage({ nodes, basicPage, contentTypeNewsPromises, nameFieldImage }: IndexPageProps) {
+
   return (
     <Layout>
       <Head>
@@ -29,8 +31,9 @@ export default function IndexPage({ nodes, basicPage, contentTypeNewsPromises }:
         <h1 className="mb-10 text-6xl font-black">Latest Articles.</h1>
         {contentTypeNewsPromises?.length ? (
           contentTypeNewsPromises.map((node) => (
+
             <div key={node.id}>
-              <NodeArticleTeaser node={node} />
+              <NodeArticleTeaser node={node} FieldImage={nameFieldImage}/>
               <hr className="my-20" />
             </div>
           ))
@@ -82,7 +85,7 @@ export async function getStaticProps(
       },
     }
   )
-
+  var nameFieldImage = []
   const contentType = await getContentType();
   const contentTypeNewsPromises: DrupalNode[][] = await Promise.all(Object.keys(contentType).map(async (i) => {
     const fields = Object.keys(contentType[i].fields).join(',')
@@ -95,8 +98,10 @@ export async function getStaticProps(
     };
 
     // Verify if exist el campo imagen para traer la información
+
     Object.keys(contentType[i].fields).map((e) => {
       if (contentType[i].fields[e].type == 'image') {
+        nameFieldImage.push(e)
         params.include = 'uid,' + e;
       }
     })
@@ -116,7 +121,8 @@ export async function getStaticProps(
     props: {
       nodes,
       basicPage,
-      contentTypeNewsPromises: contentTypeNewsPromises.flat() // Flatten the array of arrays
+      contentTypeNewsPromises: contentTypeNewsPromises.flat() ,// Flatten the array of arrays
+      nameFieldImage,
     },
   }
 }

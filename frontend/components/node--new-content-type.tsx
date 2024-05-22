@@ -2,15 +2,18 @@ import React from 'react';
 import { DrupalNode } from "next-drupal"
 import Image from "next/image"
 import { absoluteUrl, formatDate } from "lib/utils"
+import {searchFields} from "../search-fields/search-fields"
 
 interface NodeArticleProps {
     node: DrupalNode
-    nameImage: String
+    nameImage: string
 }
 
-export function NodeContentType({ node, nameImage, ...props}: NodeArticleProps) {
-  console.log(nameImage)
-  console.log(node.nameImage)
+// nameImage is the field where the name of the image field is saved.
+export function NodeContentType({ node, nameImage, ...props }: NodeArticleProps) {
+
+    var nameFieldImage =  searchFields(nameImage, node)
+
     return (
         <article {...props}>
             <h1 className="mb-4 text-6xl font-black leading-tight">{node.title}</h1>
@@ -23,18 +26,18 @@ export function NodeContentType({ node, nameImage, ...props}: NodeArticleProps) 
                 ) : null}
                 <span> - {formatDate(node.created)}</span>
             </div>
-            {node.field_image && (
+            {nameFieldImage && (
                 <figure>
                     <Image
-                        src={absoluteUrl(node.field_image.uri.url)}
+                        src={absoluteUrl(nameFieldImage.uri.url)}
                         width={768}
                         height={400}
-                        alt={node.field_image.resourceIdObjMeta.alt}
+                        alt={nameFieldImage.resourceIdObjMeta.alt}
                         priority
                     />
-                    {node.field_image.resourceIdObjMeta.title && (
+                    {nameFieldImage.resourceIdObjMeta.title && (
                         <figcaption className="py-2 text-sm text-center text-gray-600">
-                            {node.field_image.resourceIdObjMeta.title}
+                            {nameFieldImage.resourceIdObjMeta.title}
                         </figcaption>
                     )}
                 </figure>

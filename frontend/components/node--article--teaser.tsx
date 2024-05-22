@@ -3,12 +3,23 @@ import Link from "next/link"
 import { DrupalNode } from "next-drupal"
 
 import { absoluteUrl, formatDate } from "lib/utils"
-
+import FieldImage from '../lib/interface';
+import {searchFields} from "../search-fields/search-fields"
 interface NodeArticleTeaserProps {
   node: DrupalNode
+  FieldImage: string[]
 }
 
-export function NodeArticleTeaser({ node, ...props }: NodeArticleTeaserProps) {
+export function NodeArticleTeaser({ node, FieldImage, ...props }: NodeArticleTeaserProps) {
+
+  var contentSelect
+  Object.keys(node).map((i)=>{
+    FieldImage.map((e)=>{
+      if(i==e){
+        contentSelect = searchFields(e, node)
+      }
+    })
+  })
   return (
     <article {...props}>
       <Link href={node.path.alias ?? '/'} className="no-underline hover:text-blue-600">
@@ -23,13 +34,13 @@ export function NodeArticleTeaser({ node, ...props }: NodeArticleTeaserProps) {
         ) : null}
         <span> - {formatDate(node.created)}</span>
       </div>
-      {node.field_image && (
+      {contentSelect && (
         <figure className="my-4">
           <Image
-            src={absoluteUrl(node.field_image.uri.url)}
+            src={absoluteUrl(contentSelect?.uri.url)}
             width={768}
             height={480}
-            alt={node.field_image.resourceIdObjMeta.alt}
+            alt={contentSelect?.resourceIdObjMeta.alt}
             priority
           />
         </figure>
