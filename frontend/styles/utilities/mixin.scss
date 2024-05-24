@@ -1,0 +1,63 @@
+@mixin mq($mquery) {
+  $media-xxs: "(min-width : 320px)"; // iPhone Retina
+  $media-xss: "(min-width : 420px)"; // Telefonos
+  $media-xs: "(min-width : 480px)"; // Telefonos grandes
+  $media-sm: "(min-width: 767px)"; // Tablets
+  $media-md: "(min-width: 992px)"; // Escritorios
+  $media-xslg: "(min-width: 1024px)"; // Resoluciones grandes
+  $media-lg: "(min-width: 1200px)"; // Resoluciones grandes
+  $media-xlg: "(min-width: 1600px)"; // Resoluciones grandes
+
+  @if $mquery ==xxs {
+    @media #{$media-xxs} {
+      @content;
+    }
+  }
+
+  @if $mquery ==xss {
+    @media #{$media-xss} {
+      @content;
+    }
+  }
+  @if $mquery ==xs {
+    @media #{$media-xs} {
+      @content;
+    }
+  }
+
+  @else if $mquery ==sm {
+    @media #{$media-sm} {
+      @content;
+    }
+  }
+
+  @else if $mquery ==md {
+    @media #{$media-md} {
+      @content;
+    }
+  }
+
+  @else if $mquery ==xslg {
+    @media #{$media-xslg} {
+      @content;
+    }
+  }
+
+  @else if $mquery ==lg {
+    @media #{$media-lg} {
+      @content;
+    }
+  }
+
+  @else if $mquery ==xlg {
+    @media #{$media-xlg} {
+      @content;
+    }
+  }
+
+  @else {
+    @media ($mquery) {
+      @content;
+    }
+  }
+}

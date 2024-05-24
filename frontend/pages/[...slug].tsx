@@ -9,7 +9,7 @@ import { NodeBasicPage } from "components/node--basic-page"
 import { Layout } from "components/layout"
 import { getContentType } from './api/apiContentType'
 
-const RESOURCE_TYPES = ["node--page", "node--article"]
+const RESOURCE_TYPES = ["node--article"]
 
 interface NodePageProps {
   resource: DrupalNode;
@@ -25,14 +25,8 @@ export default function NodePage({ resource, contentTypeNews, nameFieldImage }: 
         <title>{resource.title}</title>
         <meta name="description" content="A Next.js site powered by Drupal." />
       </Head>
-      {/* {resource.type === "node--page" && <NodeBasicPage node={resource} />}
-      {resource.type === "node--article" && <NodeArticle node={resource} />} */}
-
+      {/* {resource.type === "node--article" && <NodeArticle node={resource} />}  */}
       {<NodeContentType node={resource} nameImage={nameFieldImage}/>}
-
-      {/* {contentTypeNews.map((i) => {
-        { <NodeContentType node={resource} /> }
-      })} */}
     </Layout>
   )
 }
